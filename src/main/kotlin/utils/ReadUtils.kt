@@ -11,6 +11,19 @@ class ReadUtils(
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
+    @Suppress("unused")
+    fun getLine(): Flow<String> =
+        flow {
+            input.forEachLine { line ->
+                coroutineScope.launch {
+                    withContext(Dispatchers.IO) {
+                        ensureActive()
+                        emit(line)
+                    }
+                }
+            }
+        }
+
     fun getLineStream(): Flow<String> =
         flow {
             input.forEachLine { line ->

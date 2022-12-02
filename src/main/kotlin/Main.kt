@@ -1,4 +1,5 @@
 import day1.GetMaxCaloriesUseCase
+import day2.RockPaperScissorsUseCase
 
 fun main() {
     val maxCaloriesUseCase = GetMaxCaloriesUseCase()
@@ -11,4 +12,6 @@ fun main() {
         flowUseCase.getMaxCalories().also { println("FLOW - max calories: $it")
         }
      */
+
+    RockPaperScissorsUseCase().getPointsForTheGuide().also { println("Points from following the guide: $it") }
 }
