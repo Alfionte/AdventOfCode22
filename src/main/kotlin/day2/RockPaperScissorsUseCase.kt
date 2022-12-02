@@ -1,5 +1,6 @@
 package day2
 
+import day2.model.MatchStrategy
 import day2.model.MyHand
 import day2.model.OpponentHand
 import day2.model.RPS
@@ -16,6 +17,16 @@ class RockPaperScissorsUseCase {
                 val myHand = MyHand(it[2]).rps
                 val opponentHand = OpponentHand(it[0]).rps
                 val game = myHand play opponentHand
+                game + myHand.value
+            }
+
+    fun getPointsForTheGuideV2(): Int =
+        input
+            .readLines()
+            .sumOf {
+                val opponentHand = OpponentHand(it[0])
+                val myHand = MatchStrategy(it[2], opponentHand).myHand
+                val game = myHand play opponentHand.rps
                 game + myHand.value
             }
 

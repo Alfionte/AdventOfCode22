@@ -24,3 +24,26 @@ data class MyHand(private val value: Char) {
             else -> RPS.Scissor
         }
 }
+
+data class MatchStrategy(private val value: Char, private val opponentHand: OpponentHand) {
+    val myHand: RPS
+        get() = when (value) {
+            'X' -> opponentHand.rps.lose()
+            'Y' -> opponentHand.rps
+            else -> opponentHand.rps.win()
+        }
+}
+
+private fun RPS.lose(): RPS =
+    when (this) {
+        is RPS.Rock -> RPS.Scissor
+        is RPS.Scissor -> RPS.Paper
+        is RPS.Paper -> RPS.Rock
+    }
+
+private fun RPS.win(): RPS =
+    when (this) {
+        is RPS.Scissor -> RPS.Rock
+        is RPS.Paper -> RPS.Scissor
+        is RPS.Rock -> RPS.Paper
+    }

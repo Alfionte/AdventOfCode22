@@ -14,4 +14,5 @@ fun main() {
      */
 
     RockPaperScissorsUseCase().getPointsForTheGuide().also { println("Points from following the guide: $it") }
+    RockPaperScissorsUseCase().getPointsForTheGuideV2().also { println("Points from following the guide V2: $it") }
 }
