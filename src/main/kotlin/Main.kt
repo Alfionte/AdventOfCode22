@@ -14,4 +14,5 @@ fun main() {
 
     // Day 3
     RuckSacksUseCase().getRuckSackPriorities().also { println("RuckSack priorities sum: $it") }
+    RuckSacksUseCase().getBadgePriorities().also { println("Badge priorities sum: $it") }
 }
