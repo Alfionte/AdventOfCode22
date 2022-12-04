@@ -1,11 +1,18 @@
 package day1
 
+import domain.UseCase
 import java.io.File
 import java.lang.Integer.max
 
-class GetMaxCaloriesUseCase {
+class GetMaxCaloriesUseCase : UseCase{
 
     private val input = File("src/main/resources/day1/input.txt")
+
+    override fun run() {
+        getMaxCalories().also { println("Get max calories: $it") }
+        getTop3Count().also { println("Top 3 calories count: $it") }
+        println()
+    }
 
     private fun getCaloriesPerElf(): List<Int> {
         val list = mutableListOf<Int>()
@@ -22,7 +29,7 @@ class GetMaxCaloriesUseCase {
         return list
     }
 
-    fun getMaxCalories(): Int {
+    private fun getMaxCalories(): Int {
         var max = 0
         var currentCount = 0
 

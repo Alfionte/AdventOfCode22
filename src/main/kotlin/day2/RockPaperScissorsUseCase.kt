@@ -4,13 +4,20 @@ import day2.model.MatchStrategy
 import day2.model.MyHand
 import day2.model.OpponentHand
 import day2.model.RPS
+import domain.UseCase
 import java.io.File
 
-class RockPaperScissorsUseCase {
+class RockPaperScissorsUseCase : UseCase {
 
     private val input = File("src/main/resources/day2/input.txt")
 
-    fun getPointsForTheGuide(): Int =
+    override fun run() {
+        getPointsForTheGuide().also { println("Points from following the guide: $it") }
+        getPointsForTheGuideV2().also { println("Points from following the guide V2: $it") }
+        println()
+    }
+
+    private fun getPointsForTheGuide(): Int =
         input
             .readLines()
             .sumOf {
@@ -20,7 +27,7 @@ class RockPaperScissorsUseCase {
                 game + myHand.value
             }
 
-    fun getPointsForTheGuideV2(): Int =
+    private fun getPointsForTheGuideV2(): Int =
         input
             .readLines()
             .sumOf {
@@ -36,4 +43,6 @@ class RockPaperScissorsUseCase {
             (this is RPS.Rock && other is RPS.Scissor) || (this is RPS.Scissor && other is RPS.Paper) || (this is RPS.Paper && other is RPS.Rock) -> 6
             else -> 0
         }
+
+
 }

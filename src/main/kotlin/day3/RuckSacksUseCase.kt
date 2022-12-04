@@ -1,10 +1,17 @@
 package day3
 
+import domain.UseCase
 import java.io.File
 
-class RuckSacksUseCase {
+class RuckSacksUseCase : UseCase{
 
     private val input = File("src/main/resources/day3/input.txt")
+
+    override fun run() {
+        getRuckSackPriorities().also { println("RuckSack priorities sum: $it") }
+        getBadgePriorities().also { println("Badge priorities sum: $it") }
+        println()
+    }
 
     fun getRuckSackPriorities(): Int =
         input

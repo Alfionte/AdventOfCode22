@@ -1,11 +1,19 @@
 package day4
 
+import domain.UseCase
 import java.io.File
 
-class CleaningAreasUseCase {
+class CleaningAreasUseCase : UseCase {
 
     private val input = File("src/main/resources/day4/input.txt")
     private val regex = "(\\d+)-(\\d+),(\\d+)-(\\d+)".toRegex()
+
+
+    override fun run() {
+        getTotalOverlapAssignments().also { println("Total overlapping assignments: $it") }
+        getPartialOverlapAssignments().also { println("Partial overlapping assignments: $it") }
+        println()
+    }
 
     fun getTotalOverlapAssignments(): Int =
         input
