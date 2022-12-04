@@ -1,6 +1,7 @@
 import day1.GetMaxCaloriesUseCase
 import day2.RockPaperScissorsUseCase
 import day3.RuckSacksUseCase
+import day4.CleaningAreasUseCase
 
 fun main() {
 
@@ -15,4 +16,7 @@ fun main() {
     // Day 3
     RuckSacksUseCase().getRuckSackPriorities().also { println("RuckSack priorities sum: $it") }
     RuckSacksUseCase().getBadgePriorities().also { println("Badge priorities sum: $it") }
+
+    // Day 4
+    CleaningAreasUseCase().getOverlapAssignment().also { println("Overlapping assignments: $it") }
 }
