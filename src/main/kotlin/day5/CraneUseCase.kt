@@ -38,7 +38,7 @@ class CraneUseCase : UseCase {
         return schema
     }
 
-    private fun moveCrates() : String {
+    private fun moveCrates(): String {
         val schema = getCratesSchema()
         val moves = getMoves()
 
@@ -51,8 +51,23 @@ class CraneUseCase : UseCase {
         return schema.joinToString(separator = "") { chars: ArrayDeque<Char> -> chars.first().toString() }
     }
 
+    private fun moveCratesImproved(): String {
+        val schema = getCratesSchema()
+        val moves = getMoves()
+
+        moves.forEach { movement ->
+            val crates = mutableListOf<Char>()
+            repeat(movement.quantity) {
+                crates.add(schema[movement.from - 1].removeFirst())
+            }
+            schema[movement.to - 1].addAll(0, crates)
+        }
+        return schema.joinToString(separator = "") { chars: ArrayDeque<Char> -> chars.first().toString() }
+    }
+
     override fun run() {
         moveCrates().also { println("Last crate schema: $it") }
+        moveCratesImproved().also { println("Last crate schema improved: $it") }
         println()
     }
 }
