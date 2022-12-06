@@ -3,6 +3,7 @@ import day2.RockPaperScissorsUseCase
 import day3.RuckSacksUseCase
 import day4.CleaningAreasUseCase
 import day5.CraneUseCase
+import day6.SignalUseCase
 
 
 val useCases = listOf(
@@ -11,6 +12,7 @@ val useCases = listOf(
     RuckSacksUseCase(),
     CleaningAreasUseCase(),
     CraneUseCase(),
+    SignalUseCase(),
 )
 
 fun main() {
