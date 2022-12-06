@@ -7,23 +7,19 @@ class SignalUseCase : UseCase {
 
     private val input = File("src/main/resources/day6/input.txt")
 
-
-    private fun getFirstCharAfterStart(): Int {
+    private fun getMessage(startSequence: Int): Int {
         val stream = input.readText()
-        for (i in 0..stream.length - 3) {
-            val set = mutableSetOf<Char>().apply {
-                add(stream[i])
-                add(stream[i + 1])
-                add(stream[i + 2])
-                add(stream[i + 3])
-            }
-            if (set.size == 4) return i + 4
+        for (i in 0 until stream.length - startSequence) {
+            val subSequence = stream.subSequence(i, i + startSequence)
+            val set = subSequence.toSet()
+            if (set.size == startSequence) return i + startSequence
         }
         return -1
     }
 
     override fun run() {
-        getFirstCharAfterStart().also { println("Get first char after start sequence: index: $it") }
+        getMessage(4).also { println("Get message after start sequence (4): index: $it") }
+        getMessage(14).also { println("Get message after start sequence (14): index: $it") }
         println()
     }
 }
