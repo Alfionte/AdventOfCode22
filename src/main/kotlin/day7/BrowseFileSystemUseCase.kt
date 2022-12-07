@@ -48,8 +48,29 @@ class BrowseFileSystemUseCase : UseCase {
         return root
     }
 
+    private fun Element.Dir.sumAllDirectories(maxDirectorySize: Int): Int {
+        val directoriesSize = mutableListOf<Int>()
+
+        this.getSize(directoriesSize)
+
+        return directoriesSize
+            .filter { it <= maxDirectorySize }
+            .sum()
+    }
+
+    private fun Element.getSize(directoriesSize: MutableList<Int>): Int {
+        return when (this) {
+            is Element.Dir -> children.sumOf { it.getSize(directoriesSize) }.also { directoriesSize.add(it) }
+            is Element.File -> size
+        }
+    }
+
     override fun run() {
-        readFileSystem().also { println("Read file system: $it") }
+        val fileSystem = readFileSystem()
+        println("Read file system: $fileSystem")
+        val maxDirectorySize = 100000
+        val sum = fileSystem.sumAllDirectories(maxDirectorySize)
+        println("Sum all directories with max: $maxDirectorySize sum: $sum")
         println()
     }
 }
