@@ -50,12 +50,25 @@ class BrowseFileSystemUseCase : UseCase {
 
     private fun Element.Dir.sumAllDirectories(maxDirectorySize: Int): Int {
         val directoriesSize = mutableListOf<Int>()
-
-        this.getSize(directoriesSize)
-
+        getSize(directoriesSize)
         return directoriesSize
             .filter { it <= maxDirectorySize }
             .sum()
+    }
+
+    private fun Element.Dir.findSmallerDirToClean(sizeUpdate: Int): Int {
+        val maxFileSystemSize = 70000000
+
+        val directoriesSize = mutableListOf<Int>()
+        this.getSize(directoriesSize)
+
+        val rootSize = directoriesSize.max()
+        val freeSpace = maxFileSystemSize - rootSize
+        val directorySizeToClean = sizeUpdate - freeSpace
+
+        return directoriesSize
+            .filter { it >= directorySizeToClean }
+            .minOf { it }
     }
 
     private fun Element.getSize(directoriesSize: MutableList<Int>): Int {
@@ -68,9 +81,15 @@ class BrowseFileSystemUseCase : UseCase {
     override fun run() {
         val fileSystem = readFileSystem()
         println("Read file system: $fileSystem")
+
         val maxDirectorySize = 100000
         val sum = fileSystem.sumAllDirectories(maxDirectorySize)
         println("Sum all directories with max: $maxDirectorySize sum: $sum")
+
+        val minDirectorySize = 30000000
+        val directorySizeToClean = fileSystem.findSmallerDirToClean(minDirectorySize)
+        println("Min directory size to clean: $directorySizeToClean")
+
         println()
     }
 }
