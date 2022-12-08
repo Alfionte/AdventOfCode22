@@ -86,6 +86,5 @@ class TreeUseCase : UseCase {
             .flatten()
             .count { it.rightVisibility || it.leftVisibility || it.topVisibility || it.bottomVisibility }
             .also { println("Visible trees: $it") }
-        println()
     }
 }
