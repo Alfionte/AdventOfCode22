@@ -5,6 +5,7 @@ import day4.CleaningAreasUseCase
 import day5.CraneUseCase
 import day6.SignalUseCase
 import day7.BrowseFileSystemUseCase
+import day8.TreeUseCase
 
 
 val useCases = listOf(
@@ -15,6 +16,7 @@ val useCases = listOf(
     CraneUseCase(),
     SignalUseCase(),
     BrowseFileSystemUseCase(),
+    TreeUseCase(),
 )
 
 fun main() {
