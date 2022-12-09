@@ -17,9 +17,11 @@ class RopeUseCase : UseCase {
             .map { line -> MoveDirectionMapper.fromLine(line) }
 
 
-    private fun List<MoveDirection>.moveRope(): Pair<RopeNode.Head, RopeNode.Tail> {
+    private fun List<MoveDirection>.moveRope(): HashSet<Point> {
+
         var head = RopeNode.Head(Point())
         var tail = RopeNode.Tail(Point())
+        val uniqueTailPoints = HashSet<Point>().apply { add(tail.position) }
 
         // For each movement
         forEach { moveDirection ->
@@ -30,17 +32,31 @@ class RopeUseCase : UseCase {
                     is MoveDirection.Right -> head.copy(position = Point(head.position.x.inc(), head.position.y))
                     is MoveDirection.Up -> head.copy(position = Point(head.position.x, head.position.y.inc()))
                 }
-                println("Head move to: $head")
-                println("Tail move to: $tail")
+                tail = tail.tailMovement(head)
+                uniqueTailPoints.add(tail.position)
             }
         }
-        return head to tail
+        return uniqueTailPoints
+    }
+
+    private fun RopeNode.Tail.tailMovement(head: RopeNode.Head): RopeNode.Tail {
+        val yDistance = head.position.y - position.y
+        val xDistance = head.position.x - position.x
+
+        return when {
+            yDistance > 1 -> RopeNode.Tail(Point(head.position.x, position.y.inc()))
+            yDistance < -1 -> RopeNode.Tail(Point(head.position.x, position.y.dec()))
+            xDistance > 1 -> RopeNode.Tail(Point(position.x.inc(), head.position.y))
+            xDistance < -1 -> RopeNode.Tail(Point(position.x.dec(), head.position.y))
+            else -> this
+        }
     }
 
     override fun run() {
         getHeadMoves()
             .also { println("Direction moves: $it") }
             .moveRope()
-            .also { (head, tail) -> println("End") }
+            .count()
+            .also { println("Unique tail points: $it") }
     }
 }
