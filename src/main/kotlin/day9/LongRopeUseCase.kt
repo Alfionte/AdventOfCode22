@@ -7,8 +7,10 @@ import domain.UseCase
 import java.awt.Point
 import java.io.File
 
-class RopeUseCase : UseCase {
+class LongRopeUseCase : UseCase {
 
+    @Suppress("unused")
+    private val inputTest = File("src/main/resources/day9/inputTest.txt")
     private val input = File("src/main/resources/day9/input.txt")
 
     private fun getHeadMoves(): List<MoveDirection> =
@@ -17,11 +19,14 @@ class RopeUseCase : UseCase {
             .map { line -> MoveDirectionMapper.fromLine(line) }
 
 
-    private fun List<MoveDirection>.moveRope(): HashSet<Point> {
+    private fun List<MoveDirection>.moveRope(
+        knotsSize: Int,
+        onMoveDirection: (RopeNode.Head, List<RopeNode.Knot>) -> Unit
+    ): HashSet<Point> {
 
         var head = RopeNode.Head(Point())
-        var tail = RopeNode.Knot(Point())
-        val uniqueTailPoints = HashSet<Point>().apply { add(tail.position) }
+        val knots = MutableList(knotsSize) { RopeNode.Knot(Point()) }
+        val uniqueTailPoints = HashSet<Point>().apply { add(knots.last().position) }
 
         // For each movement
         forEach { moveDirection ->
@@ -32,18 +37,27 @@ class RopeUseCase : UseCase {
                     is MoveDirection.Right -> head.copy(position = Point(head.position.x.inc(), head.position.y))
                     is MoveDirection.Up -> head.copy(position = Point(head.position.x, head.position.y.inc()))
                 }
-                tail = tail.tailMovement(head)
-                uniqueTailPoints.add(tail.position)
+
+                knots[0] = knots[0].tailMovement(head)
+                for (i in 1..knots.lastIndex) {
+                    knots[i] = knots[i].tailMovement(knots[i - 1])
+                }
+                uniqueTailPoints.add(knots.last().position)
             }
+            onMoveDirection(head, knots)
         }
         return uniqueTailPoints
     }
 
-    private fun RopeNode.Knot.tailMovement(head: RopeNode.Head): RopeNode.Knot {
+    private fun RopeNode.Knot.tailMovement(head: RopeNode): RopeNode.Knot {
         val yDistance = head.position.y - position.y
         val xDistance = head.position.x - position.x
 
         return when {
+            yDistance > 1 && xDistance > 1 -> RopeNode.Knot(Point(position.x.inc(), position.y.inc()))
+            yDistance < -1 && xDistance < -1 -> RopeNode.Knot(Point(position.x.dec(), position.y.dec()))
+            yDistance < -1 && xDistance > 1 -> RopeNode.Knot(Point(position.x.inc(), position.y.dec()))
+            yDistance > 1 && xDistance < -1 -> RopeNode.Knot(Point(position.x.dec(), position.y.inc()))
             yDistance > 1 -> RopeNode.Knot(Point(head.position.x, position.y.inc()))
             yDistance < -1 -> RopeNode.Knot(Point(head.position.x, position.y.dec()))
             xDistance > 1 -> RopeNode.Knot(Point(position.x.inc(), head.position.y))
@@ -52,10 +66,17 @@ class RopeUseCase : UseCase {
         }
     }
 
+    @Suppress("UNUSED_ANONYMOUS_PARAMETER")
     override fun run() {
+        @Suppress("ControlFlowWithEmptyBody")
         getHeadMoves()
             .also { println("Direction moves: $it") }
-            .moveRope()
+            .moveRope(9) { head, knots ->
+                // printIntermediate(15, head, knots)
+            }
+            .also {
+                // printResult(15, it)
+            }
             .count()
             .also { println("Unique tail points: $it") }
     }

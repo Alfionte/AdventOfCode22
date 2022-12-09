@@ -2,9 +2,9 @@ package day9.model
 
 import java.awt.Point
 
-sealed interface RopeNode {
-    data class Head(val position: Point)
-    data class Tail(val position: Point)
+sealed class RopeNode(open val position: Point) {
+    data class Head(override val position: Point) : RopeNode(position)
+    data class Knot(override val position: Point) : RopeNode(position)
 }
 
 sealed class MoveDirection(open val quantity: Int) {

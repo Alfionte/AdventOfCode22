@@ -7,6 +7,7 @@ import day6.SignalUseCase
 import day7.BrowseFileSystemUseCase
 import day8.TreeScenicScoreUseCase
 import day8.TreeUseCase
+import day9.LongRopeUseCase
 import day9.RopeUseCase
 
 
@@ -21,6 +22,7 @@ val useCases = listOf(
     TreeUseCase(),
     TreeScenicScoreUseCase(),
     RopeUseCase(),
+    LongRopeUseCase(),
 )
 
 fun main() {
