@@ -1,10 +1,17 @@
 package day9.model
 
-sealed interface MoveDirection {
-    data class Up(val quantity: Int) : MoveDirection
-    data class Down(val quantity: Int) : MoveDirection
-    data class Right(val quantity: Int) : MoveDirection
-    data class Left(val quantity: Int) : MoveDirection
+import java.awt.Point
+
+sealed interface RopeNode {
+    data class Head(val position: Point)
+    data class Tail(val position: Point)
+}
+
+sealed class MoveDirection(open val quantity: Int) {
+    data class Up(override val quantity: Int) : MoveDirection(quantity)
+    data class Down(override val quantity: Int) : MoveDirection(quantity)
+    data class Right(override val quantity: Int) : MoveDirection(quantity)
+    data class Left(override val quantity: Int) : MoveDirection(quantity)
 }
 
 object MoveDirectionMapper {
