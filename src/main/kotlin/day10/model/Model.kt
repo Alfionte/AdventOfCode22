@@ -3,7 +3,10 @@
 package day10.model
 
 sealed interface Instruction {
-    object Noop : Instruction /* no-op */
+    object Noop : Instruction {
+        override fun toString() = "Noop"
+    }
+
     data class AddX(val value: Int) : Instruction
 }
 
@@ -20,3 +23,16 @@ fun String.toInstruction(): Instruction =
             .destructured
             .let { (number) -> Instruction.AddX(number.toInt()) }
     }
+
+
+sealed interface Pixel {
+    object Lit : Pixel {
+        override fun toString() = "#"
+    }
+
+    object Dark : Pixel {
+        override fun toString() = "."
+    }
+}
+
+data class DrawResult(val registy : Int, val pixels : List<Pixel>)

@@ -1,6 +1,8 @@
 package day10
 
+import day10.model.DrawResult
 import day10.model.Instruction
+import day10.model.Pixel
 import day10.model.toInstruction
 import domain.UseCase
 import java.io.File
@@ -34,7 +36,7 @@ class VideoSignalUseCase : UseCase {
         val signalStrengths = cycleChecks.associate { (it - 1) to 0 }.toMutableMap()
         var registry = 1
 
-        toCycles().forEachIndexed { i, instruction ->
+        forEachIndexed { i, instruction ->
             allCycles.add(i to registry)
             if (signalStrengths.keys.contains(i)) signalStrengths[i] = registry
             if (instruction is Instruction.AddX) registry += instruction.value
@@ -45,11 +47,46 @@ class VideoSignalUseCase : UseCase {
             .sumOf { (it.first + 1) * it.second }
     }
 
+    private fun List<List<Instruction>>.drawGrid(onLineDrawn: (List<Pixel>) -> Unit) {
+        var registry = 1
+        for (i in 0..lastIndex) {
+            val drawResult = this[i].drawLine(registry)
+            registry = drawResult.registy
+            onLineDrawn(drawResult.pixels)
+        }
+    }
+
+    private fun List<Instruction>.drawLine(registry: Int): DrawResult {
+        val drawing = mutableListOf<Pixel>()
+        val lineCycle = mutableListOf<Pair<Int, Int>>()
+        var internalRegistry = registry
+
+        forEachIndexed { cycle, instruction ->
+            lineCycle.add(cycle to registry)
+            val pixel = if (cycle.isInSprite(internalRegistry)) Pixel.Lit else Pixel.Dark
+            drawing.add(pixel)
+            if (instruction is Instruction.AddX) internalRegistry += instruction.value
+        }
+        return DrawResult(internalRegistry, drawing)
+    }
+
+    private infix fun Int.isInSprite(registry: Int) = this == registry || this == registry - 1 || this == registry + 1
+
     override fun run() {
         getInstructions()
+            .toCycles()
             .getSignalStrength(listOf(20, 60, 100, 140, 180, 220))
             .also {
                 println("Signal strengths: $it")
+                println()
+            }
+
+        getInstructions()
+            .toCycles()
+            .also { println("CRT:") }
+            .chunked(40)
+            .drawGrid { line ->
+                line.forEach { print(it) }
                 println()
             }
     }
