@@ -1,4 +1,5 @@
 import day1.GetMaxCaloriesUseCase
+import day10.VideoSignalUseCase
 import day2.RockPaperScissorsUseCase
 import day3.RuckSacksUseCase
 import day4.CleaningAreasUseCase
@@ -23,6 +24,7 @@ val useCases = listOf(
     TreeScenicScoreUseCase(),
     RopeUseCase(),
     LongRopeUseCase(),
+    VideoSignalUseCase(),
 )
 
 fun main() {

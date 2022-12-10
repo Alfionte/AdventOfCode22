@@ -78,6 +78,9 @@ class LongRopeUseCase : UseCase {
                 // printResult(15, it)
             }
             .count()
-            .also { println("Unique tail points: $it") }
+            .also {
+                println("Unique tail points: $it")
+                println()
+            }
     }
 }
