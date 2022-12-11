@@ -88,6 +88,7 @@ class VideoSignalUseCase : UseCase {
             .drawGrid { line ->
                 line.forEach { print(it) }
                 println()
-            }
+            }.also { println() }
+
     }
 }
