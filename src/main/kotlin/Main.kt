@@ -1,5 +1,6 @@
 import day1.GetMaxCaloriesUseCase
 import day10.VideoSignalUseCase
+import day11.MonkeyBusinessUseCase
 import day2.RockPaperScissorsUseCase
 import day3.RuckSacksUseCase
 import day4.CleaningAreasUseCase
@@ -25,6 +26,7 @@ val useCases = listOf(
     RopeUseCase(),
     LongRopeUseCase(),
     VideoSignalUseCase(),
+    MonkeyBusinessUseCase(),
 )
 
 fun main() {
